@@ -1,6 +1,6 @@
 import { getContext } from '../../../extensions.js';
 
-const EXT='my-preset-life', PROMPT_KEY='my_preset_life', VERSION='0.2.0';
+const EXT='my-preset-life', PROMPT_KEY='my_preset_life', VERSION='0.2.1';
 const DEFAULTS={enabled:true,speechEnabled:true,proseEnabled:true,naturalness:'living',register:'character',profanity:'character',distinctVoices:true,imperfectSpeech:true,proseStyle:'living',pov:'third_close',length:'medium',detail:'balanced',dialogue:'balanced',innerWorld:'balanced',showDontTell:true,sensory:true,antiEcho:true,overrides:{},openSection:'prose'};
 
 const M={
@@ -62,8 +62,8 @@ function inject(){try{const c=getContext(),t=assembled();c.setExtensionPrompt?.(
 function opt(v,l){return `<option value="${v}">${l}</option>`;}
 function rowSelect(id,title,help,kind,options){return `<div class="mpl-control"><div class="mpl-label"><span><b>${title}</b><small>${help}</small></span><button class="menu_button mpl-pencil" data-kind="${kind}">✏️</button></div><select id="${id}" class="text_pole">${options}</select></div>`;}
 function toggle(id,title,help,mid){return `<div class="mpl-toggle-row"><label class="checkbox_label"><input id="${id}" type="checkbox"><span><b>${title}</b><small>${help}</small></span></label><button class="menu_button mpl-pencil" data-edit="${mid}">✏️</button></div>`;}
-function create(){const host=$('#extensions_settings2')||$('#extensions_settings');if(!host||$('#my-preset-life-settings'))return;const d=document.createElement('div');d.id='my-preset-life-settings';d.innerHTML=`
-<div class="inline-drawer"><div class="inline-drawer-toggle inline-drawer-header mpl-head"><b>My Preset Life 🧬</b><div class="inline-drawer-icon fa-solid fa-circle-chevron-down down"></div></div><div class="inline-drawer-content mpl-wrap">
+function create(){const host=$('#extensions_settings2')||$('#extensions_settings');if(!host||$('#my-preset-life-settings'))return;const d=document.createElement('div');d.id='my-preset-life-settings';d.className='inline-drawer';d.innerHTML=`
+<div class="inline-drawer-toggle inline-drawer-header mpl-head"><b>My Preset Life 🧬 · ${VERSION}</b><div class="inline-drawer-icon fa-solid fa-circle-chevron-down down"></div></div><div class="inline-drawer-content mpl-wrap">
 <div class="mpl-hero"><div><b>Конструктор живого пресета</b><span>Ты управляешь — движок собирает инструкцию.</span></div><span class="mpl-chip" id="mpl-active-count"></span></div>
 <label class="checkbox_label mpl-master"><input id="mpl-enabled" type="checkbox"><span><b>🧬 Engine</b> · передавать активные модули модели</span></label>
 
@@ -95,8 +95,8 @@ ${toggle('mpl-antiecho','Не повторять пользователя','Не
 <div class="mpl-section mpl-disabled-section"><button class="mpl-section-head" type="button"><span>🎬 <b>Режиссура</b><small>следующий модуль</small></span><span>🔒</span></button></div>
 
 <div id="mpl-editor" class="mpl-editor" hidden><div class="mpl-editor-head"><div><b id="mpl-editor-title">Редактор</b><small id="mpl-editor-help"></small></div><button id="mpl-editor-close" class="menu_button">✕</button></div><div class="mpl-tabs"><button id="mpl-tab-user" class="menu_button mpl-selected">Моя версия</button><button id="mpl-tab-factory" class="menu_button">Заводской оригинал</button></div><textarea id="mpl-editor-text" class="text_pole" rows="9"></textarea><div id="mpl-factory-note" class="mpl-note" hidden>🔒 Оригинал хранится внутри расширения и не изменяется.</div><div class="mpl-editor-actions"><button id="mpl-save-edit" class="menu_button">💾 Сохранить мою</button><button id="mpl-copy-factory" class="menu_button">📋 Взять оригинал</button><button id="mpl-reset-edit" class="menu_button">↶ Сбросить</button></div></div>
-<details class="mpl-preview-box"><summary>👁 Что сейчас отправляется модели</summary><pre id="mpl-preview"></pre></details><div class="mpl-foot">v0.2 · 🗣 Речь + ✒️ Проза · заводские prompts всегда можно вернуть</div>
-</div></div>`;host.appendChild(d);bind();sync();}
+<details class="mpl-preview-box"><summary>👁 Что сейчас отправляется модели</summary><pre id="mpl-preview"></pre></details><div class="mpl-foot">v0.2.1 · 🗣 Речь + ✒️ Проза · заводские prompts всегда можно вернуть</div>
+</div>`;host.appendChild(d);bind();sync();}
 function moduleId(kind){const map={natural:`natural_${s.naturalness}`,register:`register_${s.register}`,profanity:`profanity_${s.profanity}`,proseStyle:`prose_${s.proseStyle}`,pov:`pov_${s.pov}`,length:`length_${s.length}`,detail:`detail_${s.detail}`,dialogue:`dialogue_${s.dialogue}`,innerWorld:`inner_${s.innerWorld}`};return map[kind]||kind;}
 function openEditor(id){if(!M[id])return;editingId=id;$('#mpl-editor').hidden=false;$('#mpl-editor-title').textContent=M[id].label;$('#mpl-editor-help').textContent=M[id].help;showMode(false);$('#mpl-editor').scrollIntoView({behavior:'smooth',block:'nearest'});}
 function showMode(factory){factoryView=factory;const ta=$('#mpl-editor-text');$('#mpl-tab-user').classList.toggle('mpl-selected',!factory);$('#mpl-tab-factory').classList.toggle('mpl-selected',factory);$('#mpl-factory-note').hidden=!factory;$('#mpl-save-edit').disabled=factory;ta.readOnly=factory;ta.value=factory?M[editingId].prompt:p(editingId);}
