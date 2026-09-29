@@ -18,3 +18,7 @@ Added editable world-logic module: Modern, Fantasy variants, Apocalypse variants
 
 ## v0.6.0 DIRECTING
 Adds the scene-directing module: pacing, calm scenes, character momentum, offscreen continuity, causality, scene-state continuity, natural pauses, no premature closure, and disciplined time-skips.
+
+
+## v0.7.0 — BRAIN
+Profiles, per-chat state, global editable prompt overrides, conflict resolver and token meter.
