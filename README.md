@@ -1,10 +1,8 @@
-# My Preset Life 🧬 v0.1.0
-First functional module: **🗣 Speech**.
+# My Preset Life 🧬 v0.2.0
+Modular roleplay preset constructor for SillyTavern.
 
-- Live prompt injection through SillyTavern extension prompt API.
-- Naturalness, speech register, profanity intensity, distinct voices, imperfect speech.
-- ✏️ Every semantic module can be edited.
-- Factory prompt is immutable; user override is stored separately and can always be reset.
-- Preview shows exactly what the extension currently sends to the model.
+Current modules:
+- 🗣 Speech
+- ✒️ Prose
 
-This is the foundation for later Prose, Life, World, Relationships, Direction and Profiles modules.
+Every meaningful option has a factory prompt and supports a user override via ✏️. Factory prompts remain recoverable. Only active modules are compiled into the extension prompt. The interface uses compact accordion sections for mobile use.
