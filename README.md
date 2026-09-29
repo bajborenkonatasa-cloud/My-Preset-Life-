@@ -6,3 +6,7 @@ Current modules:
 - ✒️ Prose
 
 Every meaningful option has a factory prompt and supports a user override via ✏️. Factory prompts remain recoverable. Only active modules are compiled into the extension prompt. The interface uses compact accordion sections for mobile use.
+
+
+## v0.3.0
+Adds LIFE module: Humanity, Emotional Depth, Character Initiative, NPC Activity, Living World, Everyday Randomness. Each is a 0–100 editable prompt dial; 0 omits the module.
