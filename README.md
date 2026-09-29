@@ -10,3 +10,7 @@ Every meaningful option has a factory prompt and supports a user override via âœ
 
 ## v0.3.0
 Adds LIFE module: Humanity, Emotional Depth, Character Initiative, NPC Activity, Living World, Everyday Randomness. Each is a 0â€“100 editable prompt dial; 0 omits the module.
+
+
+## v0.4.0 WORLD
+Added editable world-logic module: Modern, Fantasy variants, Apocalypse variants, Medieval variants, Cyberpunk, Omegaverse and Custom, plus an optional custom world note.
