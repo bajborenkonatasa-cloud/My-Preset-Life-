@@ -1,6 +1,6 @@
 import { getContext } from '../../../extensions.js';
 
-const EXT='my-preset-life', PROMPT_KEY='my_preset_life', VERSION='0.2.1';
+const EXT='my-preset-life', PROMPT_KEY='my_preset_life', VERSION='0.2.2';
 const DEFAULTS={enabled:true,speechEnabled:true,proseEnabled:true,naturalness:'living',register:'character',profanity:'character',distinctVoices:true,imperfectSpeech:true,proseStyle:'living',pov:'third_close',length:'medium',detail:'balanced',dialogue:'balanced',innerWorld:'balanced',showDontTell:true,sensory:true,antiEcho:true,overrides:{},openSection:'prose'};
 
 const M={
@@ -95,18 +95,55 @@ ${toggle('mpl-antiecho','Не повторять пользователя','Не
 <div class="mpl-section mpl-disabled-section"><button class="mpl-section-head" type="button"><span>🎬 <b>Режиссура</b><small>следующий модуль</small></span><span>🔒</span></button></div>
 
 <div id="mpl-editor" class="mpl-editor" hidden><div class="mpl-editor-head"><div><b id="mpl-editor-title">Редактор</b><small id="mpl-editor-help"></small></div><button id="mpl-editor-close" class="menu_button">✕</button></div><div class="mpl-tabs"><button id="mpl-tab-user" class="menu_button mpl-selected">Моя версия</button><button id="mpl-tab-factory" class="menu_button">Заводской оригинал</button></div><textarea id="mpl-editor-text" class="text_pole" rows="9"></textarea><div id="mpl-factory-note" class="mpl-note" hidden>🔒 Оригинал хранится внутри расширения и не изменяется.</div><div class="mpl-editor-actions"><button id="mpl-save-edit" class="menu_button">💾 Сохранить мою</button><button id="mpl-copy-factory" class="menu_button">📋 Взять оригинал</button><button id="mpl-reset-edit" class="menu_button">↶ Сбросить</button></div></div>
-<details class="mpl-preview-box"><summary>👁 Что сейчас отправляется модели</summary><pre id="mpl-preview"></pre></details><div class="mpl-foot">v0.2.1 · 🗣 Речь + ✒️ Проза · заводские prompts всегда можно вернуть</div>
+<details class="mpl-preview-box"><summary>👁 Что сейчас отправляется модели</summary><pre id="mpl-preview"></pre></details><div class="mpl-foot">v0.2.2 · 🗣 Речь + ✒️ Проза · заводские prompts всегда можно вернуть</div>
 </div>`;host.appendChild(d);bind();sync();}
 function moduleId(kind){const map={natural:`natural_${s.naturalness}`,register:`register_${s.register}`,profanity:`profanity_${s.profanity}`,proseStyle:`prose_${s.proseStyle}`,pov:`pov_${s.pov}`,length:`length_${s.length}`,detail:`detail_${s.detail}`,dialogue:`dialogue_${s.dialogue}`,innerWorld:`inner_${s.innerWorld}`};return map[kind]||kind;}
 function openEditor(id){if(!M[id])return;editingId=id;$('#mpl-editor').hidden=false;$('#mpl-editor-title').textContent=M[id].label;$('#mpl-editor-help').textContent=M[id].help;showMode(false);$('#mpl-editor').scrollIntoView({behavior:'smooth',block:'nearest'});}
 function showMode(factory){factoryView=factory;const ta=$('#mpl-editor-text');$('#mpl-tab-user').classList.toggle('mpl-selected',!factory);$('#mpl-tab-factory').classList.toggle('mpl-selected',factory);$('#mpl-factory-note').hidden=!factory;$('#mpl-save-edit').disabled=factory;ta.readOnly=factory;ta.value=factory?M[editingId].prompt:p(editingId);}
-function bind(){const bc=(id,k)=>$(id).addEventListener('change',e=>{s[k]=e.target.checked;save();inject();}),bs=(id,k)=>$(id).addEventListener('change',e=>{s[k]=e.target.value;save();inject();});
-bc('#mpl-enabled','enabled');bc('#mpl-speech-enabled','speechEnabled');bc('#mpl-prose-enabled','proseEnabled');bc('#mpl-distinct','distinctVoices');bc('#mpl-imperfect','imperfectSpeech');bc('#mpl-show','showDontTell');bc('#mpl-sensory','sensory');bc('#mpl-antiecho','antiEcho');
-bs('#mpl-natural','naturalness');bs('#mpl-register','register');bs('#mpl-profanity','profanity');bs('#mpl-prose-style','proseStyle');bs('#mpl-pov','pov');bs('#mpl-length','length');bs('#mpl-detail','detail');bs('#mpl-dialogue','dialogue');bs('#mpl-inner','innerWorld');
-$$('.mpl-section:not(.mpl-disabled-section) .mpl-section-head').forEach(b=>b.addEventListener('click',()=>{const sec=b.closest('.mpl-section'),name=sec.dataset.section,was=sec.classList.contains('open');$$('.mpl-section').forEach(x=>x.classList.remove('open'));if(!was){sec.classList.add('open');s.openSection=name;}else s.openSection='';save();}));
-$$('.mpl-pencil[data-kind]').forEach(b=>b.addEventListener('click',()=>openEditor(moduleId(b.dataset.kind))));$$('.mpl-pencil[data-edit]').forEach(b=>b.addEventListener('click',()=>openEditor(b.dataset.edit));
-$('#mpl-editor-close').addEventListener('click',()=>$('#mpl-editor').hidden=true);$('#mpl-tab-user').addEventListener('click',()=>showMode(false));$('#mpl-tab-factory').addEventListener('click',()=>showMode(true));
-$('#mpl-save-edit').addEventListener('click',()=>{if(!editingId)return;s.overrides[editingId]=$('#mpl-editor-text').value;save();inject();toastr.success('My Preset Life: твоя версия сохранена');});$('#mpl-copy-factory').addEventListener('click',()=>{showMode(false);$('#mpl-editor-text').value=M[editingId].prompt;});$('#mpl-reset-edit').addEventListener('click',()=>{delete s.overrides[editingId];save();showMode(false);inject();toastr.info('Вернула заводской prompt');});}
+function bind(){
+  const bindCheck=(id,key)=>{ const el=$(id); if(el) el.addEventListener('change',e=>{s[key]=e.target.checked;save();inject();}); };
+  const bindSelect=(id,key)=>{ const el=$(id); if(el) el.addEventListener('change',e=>{s[key]=e.target.value;save();inject();}); };
+  [['#mpl-enabled','enabled'],['#mpl-speech-enabled','speechEnabled'],['#mpl-prose-enabled','proseEnabled'],['#mpl-distinct','distinctVoices'],['#mpl-imperfect','imperfectSpeech'],['#mpl-show','showDontTell'],['#mpl-sensory','sensory'],['#mpl-antiecho','antiEcho']].forEach(([id,key])=>bindCheck(id,key));
+  [['#mpl-natural','naturalness'],['#mpl-register','register'],['#mpl-profanity','profanity'],['#mpl-prose-style','proseStyle'],['#mpl-pov','pov'],['#mpl-length','length'],['#mpl-detail','detail'],['#mpl-dialogue','dialogue'],['#mpl-inner','innerWorld']].forEach(([id,key])=>bindSelect(id,key));
+  $$('.mpl-section:not(.mpl-disabled-section) .mpl-section-head').forEach((button)=>{
+    button.addEventListener('click',()=>{
+      const sec=button.closest('.mpl-section'); const name=sec.dataset.section; const was=sec.classList.contains('open');
+      $$('.mpl-section').forEach(x=>x.classList.remove('open'));
+      if(!was){sec.classList.add('open');s.openSection=name;} else s.openSection='';
+      save();
+    });
+  });
+  $$('.mpl-pencil[data-kind]').forEach((button)=>{button.addEventListener('click',()=>openEditor(moduleId(button.dataset.kind)));});
+  $$('.mpl-pencil[data-edit]').forEach((button)=>{button.addEventListener('click',()=>openEditor(button.dataset.edit));});
+  $('#mpl-editor-close')?.addEventListener('click',()=>{$('#mpl-editor').hidden=true;});
+  $('#mpl-tab-user')?.addEventListener('click',()=>showMode(false));
+  $('#mpl-tab-factory')?.addEventListener('click',()=>showMode(true));
+  $('#mpl-save-edit')?.addEventListener('click',()=>{if(!editingId)return;s.overrides[editingId]=$('#mpl-editor-text').value;save();inject();toastr.success('My Preset Life: твоя версия сохранена');});
+  $('#mpl-copy-factory')?.addEventListener('click',()=>{showMode(false);$('#mpl-editor-text').value=M[editingId].prompt;});
+  $('#mpl-reset-edit')?.addEventListener('click',()=>{delete s.overrides[editingId];save();showMode(false);inject();toastr.info('Вернула заводской prompt');});
+}
 function sync(){const checks={enabled:'mpl-enabled',speechEnabled:'mpl-speech-enabled',proseEnabled:'mpl-prose-enabled',distinctVoices:'mpl-distinct',imperfectSpeech:'mpl-imperfect',showDontTell:'mpl-show',sensory:'mpl-sensory',antiEcho:'mpl-antiecho'};for(const[k,id]of Object.entries(checks))$('#'+id).checked=!!s[k];const sels={naturalness:'mpl-natural',register:'mpl-register',profanity:'mpl-profanity',proseStyle:'mpl-prose-style',pov:'mpl-pov',length:'mpl-length',detail:'mpl-detail',dialogue:'mpl-dialogue',innerWorld:'mpl-inner'};for(const[k,id]of Object.entries(sels))$('#'+id).value=s[k];if(s.openSection)$(`.mpl-section[data-section="${s.openSection}"]`)?.classList.add('open');update();}
 function update(){const out=$('#mpl-preview');if(!out)return;out.textContent=assembled()||'Ничего не отправляется модели: Engine или все модули выключены.';const n=allIds().length?allIds().length-1:0;$('#mpl-active-count').textContent=`Активно: ${n}`;$('#mpl-speech-summary').textContent=s.speechEnabled?`${speechIds().length} активно`:'выкл.';$('#mpl-prose-summary').textContent=s.proseEnabled?`${M[`prose_${s.proseStyle}`]?.label.replace('Стиль · ','')||''} · ${proseIds().length} активно`:'выкл.';}
-function init(){load();create();inject();let tries=0;const t=setInterval(()=>{create();if($('#my-preset-life-settings')||++tries>30)clearInterval(t)},500);console.log(`[My Preset Life] v${VERSION} loaded`);}jQuery(init);
+function init(){
+  try {
+    load();
+    create();
+    inject();
+    let tries=0;
+    const t=setInterval(()=>{
+      try { create(); } catch(e) { console.error('[My Preset Life] panel retry failed',e); }
+      if($('#my-preset-life-settings')||++tries>40) clearInterval(t);
+    },500);
+    console.log(`[My Preset Life] v${VERSION} loaded`);
+  } catch(e) {
+    console.error('[My Preset Life] startup failed',e);
+    // Last-resort panel retry: if settings host appears later, try again without hiding the failure.
+    let tries=0;
+    const t=setInterval(()=>{
+      try { if(!s) load(); create(); if($('#my-preset-life-settings')) clearInterval(t); }
+      catch(err){ console.error('[My Preset Life] recovery retry failed',err); }
+      if(++tries>40) clearInterval(t);
+    },500);
+  }
+}
+jQuery(init);
