@@ -14,3 +14,7 @@ Adds LIFE module: Humanity, Emotional Depth, Character Initiative, NPC Activity,
 
 ## v0.4.0 WORLD
 Added editable world-logic module: Modern, Fantasy variants, Apocalypse variants, Medieval variants, Cyberpunk, Omegaverse and Custom, plus an optional custom world note.
+
+
+## v0.6.0 DIRECTING
+Adds the scene-directing module: pacing, calm scenes, character momentum, offscreen continuity, causality, scene-state continuity, natural pauses, no premature closure, and disciplined time-skips.
